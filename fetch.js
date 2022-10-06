@@ -4,7 +4,7 @@ const fragmentoUsuarios = document.createDocumentFragment();
 
 const obtenerUsuarios = async () => {
     try {
-        //listaUsuarios.innerHTML = "";
+        listaUsuarios.innerHTML = "";
         const usuarios = await fetch("https://jsonplaceholder.typicode.com/users");
         const usuarios_json = await usuarios.json();
 
@@ -12,20 +12,9 @@ const obtenerUsuarios = async () => {
             throw { status: usuarios.status, statusText: usuarios.statusText }
         }
 
-        usuarios_json.forEach((usuario) => {
-            const usuarioHtml = document.createElement("li");
-            usuarioHtml.classList.add("usuario_item");
-            usuarioHtml.innerHTML =
-                `
-        <strong class="item" >Id:</strong> ${usuario.id} - <strong class="item">Nombre:</strong> ${usuario.name}
-        <br />
-        <strong class="item">Email: </strong> ${usuario.email}
-        `;
+        renderizarUsuarios(usuarios_json);
 
-            fragmentoUsuarios.appendChild(usuarioHtml);
-        });
 
-        listaUsuarios.appendChild(fragmentoUsuarios);
     } catch (error) {
         let mensaje = error.statusText || "Ocurrió un error";
         const errorApi = document.createElement("li");
@@ -35,6 +24,23 @@ const obtenerUsuarios = async () => {
         console.log("Evento culminado");
     }
 
+}
+
+const renderizarUsuarios = (usuarios) => {
+    usuarios.forEach((usuario) => {
+        const usuarioHtml = document.createElement("li");
+        usuarioHtml.classList.add("usuario_item");
+        usuarioHtml.innerHTML =
+            `
+    <strong class="item" >Id:</strong> ${usuario.id} - <strong class="item">Nombre:</strong> ${usuario.name}
+    <br />
+    <strong class="item">Email: </strong> ${usuario.email}
+    `;
+
+        fragmentoUsuarios.appendChild(usuarioHtml);
+    });
+
+    listaUsuarios.appendChild(fragmentoUsuarios);
 }
 
 btn_obtenerUsuarios.addEventListener("click", (e) => {
